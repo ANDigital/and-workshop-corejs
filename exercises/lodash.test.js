@@ -1,3 +1,59 @@
+const _ = {
+  reduce: (data, operation, start = 0) => {
+    let result = start
+
+    for (let i = 0; i < data.length; i++) {
+      result = operation(result, data[i])
+    }
+
+    return result
+  },
+  map: (collection, callback) => {
+    let result = []
+
+    collection.forEach(item => result.push(callback(item)))
+
+    return result
+  },
+  pick: (object, prop) => object[prop],
+  partialRight: (func, ...partialRightArgs) => (
+    (...originalArgs) => func(...originalArgs, ...partialRightArgs)
+  ),
+  memoize: (func) => {
+    const store = []
+    const cacheResult = (args, result) => { 
+        store.push({ args, result })
+        return result 
+    }
+    const findInStore = props => store.find(entry => 
+        entry.args.every((arg, index) => arg == props[index])
+    )
+
+    const isInStore = (...props) => findInStore(props)
+
+    return isInStore ? findInStore(props).result : cacheResult(props, func(...props))
+  },
+  defaults: (original, defaults) => (
+    {
+    ...defaults,
+    ...original,
+    }
+  ),
+  throttle: (fn, delay) => {
+    let lastCall = 0
+
+    return (...args) => {
+      const now = (new Date).getTime()
+      if (now - lastCall < delay) return
+      
+      lastCall = now
+      
+      return fn(...args)
+    }
+  }
+}
+
+
 // ## Implement .reduce
 // Should take an array of values and apply the callback
 // **Bonus Point:** Do this with recursion
