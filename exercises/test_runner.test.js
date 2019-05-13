@@ -1,3 +1,22 @@
+const assert = expectedValue => (
+  {
+    toBeTruthy: () => !!expectedValue,
+    toBe: value => expectedValue === value,
+    toEqual: value => JSON.stringify(expectedValue) === JSON.stringify(value),
+    toThrow: () => {
+      let didThrow = false
+
+      try {
+        expectedValue()
+      } catch(e) {
+        didThrow = true
+      }
+      
+      return didThrow
+    }
+  }
+)
+
 // ## Implement .toBeTruthy
 // https://jestjs.io/docs/en/expect#tobetruthy
 
