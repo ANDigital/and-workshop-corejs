@@ -1,3 +1,65 @@
+const myFirstPromise = (accept) => (
+  new Promise((resolve, reject) => {
+    accept? resolve('Yay!') : reject('Boo :(')
+  })
+)
+
+const rainbowConverter = () => (
+  Promise.resolve([
+    'red',
+    'orange',
+    'yellow',
+    'green',
+    'blue',
+    'indigo',
+    'violet'
+  ])
+  .then(colours => colours.map((colour,index) => ({
+    id: index,
+    colour
+  })))
+)
+
+const caughtPromise = () => (
+  Promise.reject(new Error('The promise rejected'))
+)
+
+const myFirstAsyncAwait = async (accept) => {
+  try {
+    if(accept) return 'Yay!'
+    throw 'oops'
+  } catch (e) {
+    throw new Error('Boo :(')
+  }
+}
+
+const asyncAwaitRainbowConverter = async () => {
+  const colours = await [
+    'red',
+    'orange',
+    'yellow',
+    'green',
+    'blue',
+    'indigo',
+    'violet'
+  ]
+
+  return colours.map((colour,index) => ({
+    id: index,
+    colour
+  }))
+}
+
+const caughtAsyncAwait = async () => {
+  try { 
+    throw 'oops' 
+  } catch (e) {
+    throw new Error('The promise rejected')
+  }
+}
+
+
+
 //## Part 1: A basic promise
 // Implement a `myFirstPromise` function which returns a promise
 //If its successful the response should be "Yay!"
@@ -7,15 +69,7 @@
 //Implement the function `rainbowConverter` which resolves  an array of colours
 //Then loop over the colours, converting each colour from a string to an object
 //The object should contain a 'colour' key and an 'id' key which is its index in the array
-const colours = [
-  'red',
-  'orange',
-  'yellow',
-  'green',
-  'blue',
-  'indigo',
-  'violet'
-];
+
 
 //## Part 3: Caught Promises
 //Implement the function `caughtPromise` which rejects with an error object
@@ -26,14 +80,14 @@ const colours = [
 
 describe('myFirstPromise', () => {
   test('should return "Yay!" if the promise resolves', async () => {
-    const result = await myFirstPromise();
+    const result = await myFirstPromise(true);
     expect(result).toEqual('Yay!');
   });
 
   test('should return "Boo :(" if the promise rejects', async () => {
     let error = false;
     try {
-      await myFirstPromise();
+      await myFirstPromise(false);
     } catch (e) {
       error = e;
     }
@@ -70,14 +124,14 @@ describe('caughtPromise', () => {
 
 describe('myFirstAsyncAwait', () => {
   test('should return "Yay!" if the promise resolves', async () => {
-    const result = await myFirstAsyncAwait();
+    const result = await myFirstAsyncAwait(true);
     expect(result).toEqual('Yay!');
   });
 
   test('should return "Boo :(" if the promise rejects', async () => {
     let error = false;
     try {
-      await myFirstAsyncAwait();
+      await myFirstAsyncAwait(false);
     } catch (e) {
       error = e;
     }
